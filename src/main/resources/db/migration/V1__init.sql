@@ -1,3 +1,4 @@
+-- Таблица пользователей. 
 create table users (
                        id         bigserial primary key,
                        username   varchar(36) not null,
@@ -7,6 +8,7 @@ create table users (
                        updated_at timestamp default current_timestamp
 );
 
+--Таблица ролей
 create table roles (
                        id         bigserial primary key,
                        name       varchar(50) not null,
@@ -14,6 +16,7 @@ create table roles (
                        updated_at timestamp default current_timestamp
 );
 
+--Таблица связи многие-ко-многим ролей и пользователей.
 create table users_roles (
                              user_id    bigint not null references users (id),
                              role_id    bigint not null references roles (id),
@@ -22,52 +25,37 @@ create table users_roles (
                              primary key (user_id, role_id)
 );
 
-insert into roles (name)
-values ('ROLE_USER'),
-       ('ROLE_ADMIN');
-
-insert into users (username, password, email)
-values ('bob', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bob_johnson@gmail.com'),
-       ('john', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john_johnson@gmail.com');
-
-insert into users_roles (user_id, role_id)
-values (1, 1),
-       (2, 2);
-
-create table categories (
-                            id          bigserial primary key,
-                            title       varchar(255),
-                            created_at  timestamp default current_timestamp,
-                            updated_at  timestamp default current_timestamp
+--Таблица категорий (связьи с таблицей продуктов один-ко-многим)
+create table categories
+(
+    id              bigserial primary key,
+    title           varchar(255),
+    created_at      timestamp default current_timestamp,
+    updated_at      timestamp default current_timestamp
 );
 
-create table products (
-                          id          bigserial primary key,
-                          title       varchar(255),
-                          price       numeric(8, 2),
-                          category_id bigint references categories (id),
-                          created_at  timestamp default current_timestamp,
-                          updated_at  timestamp default current_timestamp
+--Таблица продуктов
+create table products
+(
+    id              bigserial primary key,
+    title           varchar(255),
+    price           numeric(8, 2) not null,
+    category_id     bigint references categories (id),
+    created_at      timestamp default current_timestamp,
+    updated_at      timestamp default current_timestamp
 );
 
-insert into categories (title) values
-                                   ('Food'),
-                                   ('Electronic');
-
-insert into products (title, price, category_id) values
-                                                     ('Bread', 32.00, 1),
-                                                     ('Milk', 120.00, 1),
-                                                     ('Butter', 320.00, 1),
-                                                     ('Cheese', 500.00, 1);
+--Таблица заказов. Связь с таблицей пользователей многие-к-одному
 create table orders
 (
     id              bigserial primary key,
-    username        varchar(255),
+    user_id    	    bigint not null references users (id),
     total_price     numeric(8, 2),
     created_at      timestamp default current_timestamp,
     updated_at      timestamp default current_timestamp
 );
 
+--Элемент заказа. Содержит в себе ссылку на продукт, ссылку на заказ в который он входит, цена за единицу и общую цену по данному продукту.
 create table orders_items
 (
     id                      bigserial primary key,
@@ -80,3 +68,23 @@ create table orders_items
     updated_at              timestamp default current_timestamp
 );
 
+insert into categories (title) values
+                                   ('Food'),
+                                   ('Electronic');
+
+insert into products (title, price, category_id) values
+                                                     ('Bread', 32.00, 1),
+                                                     ('Milk', 120.00, 1),
+                                                     ('Butter', 320.00, 1),
+                                                     ('Cheese', 500.00, 1);
+insert into roles (name)
+values ('ROLE_USER'),
+       ('ROLE_ADMIN');
+
+insert into users (username, password, email)
+values ('bob', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bob_johnson@gmail.com'),
+       ('john', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john_johnson@gmail.com');
+
+insert into users_roles (user_id, role_id)
+values (1, 1),
+       (2, 2);

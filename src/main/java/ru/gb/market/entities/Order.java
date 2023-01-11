@@ -20,8 +20,9 @@ public class Order {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;

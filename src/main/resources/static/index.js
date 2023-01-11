@@ -70,6 +70,19 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
             });
     }
 
+    $scope.clearCart = function (id) {
+        $http.post(contextPath + '/cart/clear')
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+    $scope.deleteFromCart = function (id) {
+        $http.get(contextPath + '/cart/delete/' + id)
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
     $scope.createOrder = function () {
         $http.post(contextPath + '/orders')
             .then(function (response) {

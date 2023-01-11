@@ -78,6 +78,7 @@
             <td>Название</td>
             <td>Количество</td>
             <td>Цена</td>
+            <td></td>
         </tr>
         </thead>
         <tbody>
@@ -85,6 +86,9 @@
             <td>{{ci.productTitle}}</td>
             <td>{{ci.quantity}}</td>
             <td>{{ci.pricePerProduct + ' x ' + ci.quantity + ' = ' + ci.price}}</td>
+            <td>
+                <button class="btn btn-primary" ng-click="deleteFromCart(ci.productId)">Удалить продукт из корзины</button>
+            </td>
         </tr>
         <tr>
             <td></td>
@@ -95,6 +99,7 @@
     </table>
     <p></p>
     <button class="btn btn-primary" ng-click="createOrder()">Оформить заказ</button>
+    <button class="btn btn-primary" ng-click="clearCart()">Очистить корзину</button>
 
 <!--    <p></p>-->
 <!--    <h3>Добавить продукт</h3>-->

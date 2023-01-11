@@ -1,10 +1,7 @@
 package ru.gb.market.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.gb.market.converters.CartConverter;
 import ru.gb.market.dtos.CartDto;
 import ru.gb.market.services.CartService;
@@ -25,5 +22,13 @@ public class CartController {
     @GetMapping("/add/{productId}")
     public void addProductToCart(@PathVariable Long productId) {
         cartService.addToCart(productId);
+    }
+    @PostMapping("/clear")
+    public void clearCart() {
+        cartService.clearCart();
+    }
+    @GetMapping("/delete/{productId}")
+    public void deleteProductFromCart(@PathVariable Long productId) {
+        cartService.deleteFromCart(productId);
     }
 }

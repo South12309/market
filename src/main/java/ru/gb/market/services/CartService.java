@@ -34,4 +34,8 @@ public class CartService {
     public void clearCart() {
         cart.clear();
     }
+
+    public void deleteFromCart(Long productId) {
+        cart.delete(productId);
+    }
 }

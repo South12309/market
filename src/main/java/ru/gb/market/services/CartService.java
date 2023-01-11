@@ -38,4 +38,12 @@ public class CartService {
     public void deleteFromCart(Long productId) {
         cart.delete(productId);
     }
+
+    public void increaseProductCountInCart(Long productId) {
+        cart.increaseProductCountInCart(productId);
+    }
+
+    public void decreaseProductCountInCart(Long productId) {
+        cart.decreaseProductCountInCart(productId);
+    }
 }

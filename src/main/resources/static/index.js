@@ -71,7 +71,7 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     }
 
     $scope.clearCart = function (id) {
-        $http.post(contextPath + '/cart/clear')
+        $http.get(contextPath + '/cart/clear')
             .then(function (response) {
                 $scope.loadCart();
             });
@@ -89,6 +89,20 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
                 $scope.loadCart();
             });
 
+    }
+
+    $scope.increase = function (id) {
+        $http.get(contextPath + '/cart/inc/' + id)
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
+    $scope.decrease = function (id) {
+        $http.get(contextPath + '/cart/dec/' + id)
+            .then(function (response) {
+                $scope.loadCart();
+            });
     }
 
     // $scope.deleteProduct = function (id) {

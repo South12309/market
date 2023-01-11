@@ -39,4 +39,11 @@ public class Cart {
         totalPrice = BigDecimal.ZERO;
         items.forEach(i -> totalPrice = totalPrice.add(i.getPrice()));
     }
+
+    public void increaseProductCountInCart(Long productId) {
+        items.stream().filter(s->s.getProductId().equals(productId)).forEach(m->m.incrementQuantity());
+    }
+    public void decreaseProductCountInCart(Long productId) {
+        items.stream().filter(s->s.getProductId().equals(productId)).forEach(m->m.decrementQuantity());
+    }
 }

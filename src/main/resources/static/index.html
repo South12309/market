@@ -116,6 +116,37 @@
     <button class="btn btn-primary" ng-click="createOrder(address, phone)">Оформить заказ</button>
     <button class="btn btn-primary" ng-click="clearCart()">Очистить корзину</button>
 
+    <h3>Список заказов</h3>
+    <p></p>
+    <div ng-repeat="o in orders">
+        <label>Заказ № {{o.id}} |</label>
+        <label>На сумму: {{o.totalPrice}} |</label>
+        <label>Адрес: {{o.address}} |</label>
+        <label>Телефон: {{o.phone}}</label>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Количество</td>
+            <td>Цена</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="ci in o.items">
+            <td>{{ci.productTitle}}</td>
+            <td>{{ci.quantity}} </td>
+            <td>{{ci.pricePerProduct + ' x ' + ci.quantity + ' = ' + ci.price}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Итого:</td>
+            <td>{{cart.totalPrice}}</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <p></p>
+
 <!--    <p></p>-->
 <!--    <h3>Добавить продукт</h3>-->
 <!--    <p></p>-->

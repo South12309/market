@@ -18,8 +18,8 @@ public class OrderController {
     private final OrderConverter orderConverter;
 
     @GetMapping
-    public List<OrderDto> getUserOrders(@RequestHeader String username) {
-        return orderService.findUserOrders(username).stream().map(orderConverter::entityToDto).collect(Collectors.toList());
+    public List<OrderDto> getUserOrders(Principal principal) {
+        return orderService.findUserOrders(principal.getName()).stream().map(orderConverter::entityToDto).collect(Collectors.toList());
     }
 
     @PostMapping("/{address}/{phone}")

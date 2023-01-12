@@ -83,8 +83,8 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
             });
     }
 
-    $scope.createOrder = function () {
-        $http.post(contextPath + '/orders')
+    $scope.createOrder = function (address, phone) {
+        $http.post(contextPath + '/orders/' + address + '/' + phone)
             .then(function (response) {
                 $scope.loadCart();
             });

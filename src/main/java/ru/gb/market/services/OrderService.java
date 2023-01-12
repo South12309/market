@@ -3,7 +3,6 @@ package ru.gb.market.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.gb.market.dtos.CartDto;
 import ru.gb.market.entities.Order;
 import ru.gb.market.entities.OrderItem;
 import ru.gb.market.entities.User;
@@ -14,8 +13,6 @@ import ru.gb.market.utils.Cart;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +23,15 @@ public class OrderService {
     private final UserService userService;
 
     @Transactional
-    public void createNewOrder(String username) {
+    public void createNewOrder(String username, String address, String phone) {
         Cart cart = cartService.getCurrentCart();
         if (cart.getItems().isEmpty()) {
             throw new IllegalStateException("Нельзя оформить заказ для пустой корзины");
         }
         User user = userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("При оформлении заказа пользователь не найден"));
         Order order = new Order();
+        order.setAddress(address);
+        order.setPhone(phone);
         order.setTotalPrice(cart.getTotalPrice());
         order.setUser(user);
         order.setItems(new ArrayList<>());

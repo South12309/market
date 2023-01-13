@@ -8,7 +8,7 @@
 
 package ru.gb.market.soap;
 
-import ru.gb.market.soap.dto.ProductSoap;
+import ru.gb.market.soap.dto.*;
 
 import javax.xml.bind.annotation.XmlRegistry;
 

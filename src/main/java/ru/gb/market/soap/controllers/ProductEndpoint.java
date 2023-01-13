@@ -7,10 +7,10 @@ import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import ru.gb.market.soap.dto.GetAllProductsRequest;
-import ru.gb.market.soap.dto.GetAllProductsResponse;
-import ru.gb.market.soap.dto.GetProductByNameRequest;
-import ru.gb.market.soap.dto.GetProductByNameResponse;
+import ru.gb.market.soap.GetAllProductsRequest;
+import ru.gb.market.soap.GetAllProductsResponse;
+import ru.gb.market.soap.GetProductByNameRequest;
+import ru.gb.market.soap.GetProductByNameResponse;
 import ru.gb.market.soap.services.ProductSoapService;
 
 @Endpoint

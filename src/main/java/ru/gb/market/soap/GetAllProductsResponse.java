@@ -6,7 +6,7 @@
 //
 
 
-package ru.gb.market.soap.dto;
+package ru.gb.market.soap;
 
 import ru.gb.market.soap.dto.ProductSoap;
 

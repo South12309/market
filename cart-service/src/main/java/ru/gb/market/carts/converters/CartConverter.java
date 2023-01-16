@@ -1,9 +1,9 @@
-package ru.gb.market.core.converters;
+package ru.gb.market.carts.converters;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.gb.market.core.dtos.CartDto;
-import ru.gb.market.core.utils.Cart;
+import ru.gb.market.api.CartDto;
+import ru.gb.market.carts.models.Cart;
 
 
 import java.util.stream.Collectors;

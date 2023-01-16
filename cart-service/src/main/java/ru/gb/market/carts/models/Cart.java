@@ -1,7 +1,7 @@
-package ru.gb.market.core.utils;
+package ru.gb.market.carts.models;
 
 import lombok.Data;
-import ru.gb.market.core.entities.Product;
+import ru.gb.market.api.ProductDto;
 
 
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ public class Cart {
     private List<CartItem> items;
     private BigDecimal totalPrice;
 
-    public void add(Product p) {
+    public void add(ProductDto p) {
         for (CartItem item : items) {
             if (item.getProductId().equals(p.getId())) {
                 item.incrementQuantity();

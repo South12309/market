@@ -33,7 +33,7 @@ public class Order {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
     private List<OrderItem> items;
 
     @Column(name = "created_at")

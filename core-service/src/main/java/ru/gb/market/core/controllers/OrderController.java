@@ -3,7 +3,7 @@ package ru.gb.market.core.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.market.core.converters.OrderConverter;
-import ru.gb.market.core.dtos.OrderDto;
+import ru.gb.market.api.OrderDto;
 import ru.gb.market.core.services.OrderService;
 
 import java.security.Principal;

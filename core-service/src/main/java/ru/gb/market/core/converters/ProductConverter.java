@@ -1,7 +1,7 @@
 package ru.gb.market.core.converters;
 
 import org.springframework.stereotype.Component;
-import ru.gb.market.core.dtos.ProductDto;
+import ru.gb.market.api.ProductDto;
 import ru.gb.market.core.entities.Product;
 
 

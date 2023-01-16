@@ -1,11 +1,12 @@
-package ru.gb.market.core.services;
+package ru.gb.market.carts.services;
 
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.market.core.entities.Product;
-import ru.gb.market.core.exceptions.ResourceNotFoundException;
-import ru.gb.market.core.utils.Cart;
+import ru.gb.market.api.ProductDto;
+import ru.gb.market.api.ResourceNotFoundException;
+import ru.gb.market.carts.integrations.ProductServiceIntegration;
+import ru.gb.market.carts.models.Cart;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-    private final ProductService productService;
+    private final ProductServiceIntegration productServiceIntegration;
     private Cart cart;
 
     @PostConstruct
@@ -27,7 +28,7 @@ public class CartService {
     }
 
     public void addToCart(Long productId) {
-        Product p = productService.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Продукт с id: " + productId + " не найден"));
+        ProductDto p = productServiceIntegration.getProduct(productId).orElseThrow(() -> new ResourceNotFoundException("Продукт с id: " + productId + " не найден"));
         cart.add(p);
     }
 

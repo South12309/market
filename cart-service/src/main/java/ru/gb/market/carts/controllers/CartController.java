@@ -1,14 +1,15 @@
-package ru.gb.market.core.controllers;
+package ru.gb.market.carts.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.gb.market.core.converters.CartConverter;
-import ru.gb.market.core.dtos.CartDto;
-import ru.gb.market.core.services.CartService;
+import ru.gb.market.api.CartDto;
+import ru.gb.market.carts.converters.CartConverter;
+import ru.gb.market.carts.services.CartService;
 
 
 @RestController
 @RequestMapping("/api/v1/cart")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;

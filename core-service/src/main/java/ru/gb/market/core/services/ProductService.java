@@ -2,9 +2,9 @@ package ru.gb.market.core.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.market.core.dtos.ProductDto;
+import ru.gb.market.api.ProductDto;
 import ru.gb.market.core.entities.Product;
-import ru.gb.market.core.exceptions.ResourceNotFoundException;
+import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.core.repositories.ProductRepository;
 
 import java.util.List;

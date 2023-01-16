@@ -6,9 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gb.market.core.entities.Order;
 import ru.gb.market.core.entities.OrderItem;
 import ru.gb.market.core.entities.User;
-import ru.gb.market.core.exceptions.ResourceNotFoundException;
+import ru.gb.market.api.ResourceNotFoundException;
+import ru.gb.market.core.integrations.CartServiceIntegration;
 import ru.gb.market.core.repositories.OrderRepository;
-import ru.gb.market.core.utils.Cart;
+import ru.gb.market.api.CartDto;
 
 
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-    private final CartService cartService;
+    private final CartServiceIntegration cartService;
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserService userService;
 
     @Transactional
     public void createNewOrder(String username, String address, String phone) {
-        Cart cart = cartService.getCurrentCart();
+        CartDto cart = cartService.getCurrentCart().orElseThrow(() -> new ResourceNotFoundException("Корзина не найдена"));
         if (cart.getItems().isEmpty()) {
             throw new IllegalStateException("Нельзя оформить заказ для пустой корзины");
         }

@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.market.core.converters.ProductConverter;
-import ru.gb.market.core.dtos.ProductDto;
-import ru.gb.market.core.entities.Product;
-import ru.gb.market.core.exceptions.ResourceNotFoundException;
+import ru.gb.market.api.ProductDto;
+import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.core.services.ProductService;
 
 

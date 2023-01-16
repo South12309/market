@@ -1,5 +1,6 @@
 angular.module('market', ['ngStorage']).controller('indexController', function ($scope, $http, $localStorage) {
-    const contextPath = 'http://localhost:8189/market/api/v1';
+    const contextPathCore = 'http://localhost:8189/market/core/api/v1';
+    const contextPathCarts = 'http://localhost:8190/market/cart/api/v1';
     if ($localStorage.marchMarketUser) {
         try {
             let jwt = $localStorage.marchMarketUser.token;
@@ -19,7 +20,7 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     }
 
     $scope.tryToAuth = function () {
-        $http.post(contextPath + '/auth', $scope.user)
+        $http.post(contextPathCore + '/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
@@ -50,49 +51,50 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     };
 
     $scope.loadProducts = function () {
-        $http.get(contextPath + '/products')
+        $http.get(contextPathCore + '/products')
             .then(function (response) {
                 $scope.products = response.data;
             });
     };
 
     $scope.loadOrders = function () {
-        $http.get(contextPath + '/orders')
+        $http.get(contextPathCore + '/orders')
             .then(function (response) {
                 $scope.orders = response.data;
             });
     };
 
     $scope.loadCart = function () {
-        $http.get(contextPath + '/cart')
+        $http.get(contextPathCarts + '/cart')
             .then(function (response) {
                 $scope.cart = response.data;
             });
     };
 
     $scope.addToCart = function (id) {
-        $http.get(contextPath + '/cart/add/' + id)
+        $http.get(contextPathCarts + '/cart/add/' + id)
             .then(function (response) {
                 $scope.loadCart();
             });
     }
 
     $scope.clearCart = function (id) {
-        $http.get(contextPath + '/cart/clear')
+        $http.get(contextPathCarts + '/cart/clear')
             .then(function (response) {
                 $scope.loadCart();
             });
     }
     $scope.deleteFromCart = function (id) {
-        $http.get(contextPath + '/cart/delete/' + id)
+        $http.get(contextPathCarts + '/cart/delete/' + id)
             .then(function (response) {
                 $scope.loadCart();
             });
     }
 
     $scope.createOrder = function (address, phone) {
-        $http.post(contextPath + '/orders/' + address + '/' + phone)
+        $http.post(contextPathCore + '/orders/' + address + '/' + phone)
             .then(function (response) {
+                alert("Заказ оформлен")
                 $scope.loadCart();
                 $scope.loadOrders();
             });
@@ -100,14 +102,14 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     }
 
     $scope.increase = function (id) {
-        $http.get(contextPath + '/cart/inc/' + id)
+        $http.get(contextPathCarts + '/cart/inc/' + id)
             .then(function (response) {
                 $scope.loadCart();
             });
     }
 
     $scope.decrease = function (id) {
-        $http.get(contextPath + '/cart/dec/' + id)
+        $http.get(contextPathCarts + '/cart/dec/' + id)
             .then(function (response) {
                 $scope.loadCart();
             });

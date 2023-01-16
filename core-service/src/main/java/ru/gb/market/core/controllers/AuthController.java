@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gb.market.core.dtos.JwtRequest;
-import ru.gb.market.core.dtos.JwtResponse;
-import ru.gb.market.core.exceptions.AppError;
+import ru.gb.market.api.JwtRequest;
+import ru.gb.market.api.JwtResponse;
+import ru.gb.market.api.AppError;
 import ru.gb.market.core.services.UserService;
 import ru.gb.market.core.utils.JwtTokenUtil;
 

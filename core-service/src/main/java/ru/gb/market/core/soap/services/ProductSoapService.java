@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.gb.market.core.entities.Product;
-import ru.gb.market.core.exceptions.ResourceNotFoundException;
+import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.core.repositories.ProductRepository;
 import ru.gb.market.core.soap.dto.ProductSoap;
 

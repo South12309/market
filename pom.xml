@@ -11,6 +11,10 @@
 	<groupId>ru.gb</groupId>
 	<artifactId>market</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>market</name>
+    <packaging>pom</packaging>
+    <name>market</name>
 	<description>market</description>
+    <modules>
+        <module>front-service</module>
+    </modules>
 </project>

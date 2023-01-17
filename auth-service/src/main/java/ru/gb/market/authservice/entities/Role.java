@@ -1,4 +1,4 @@
-package ru.gb.market.core.entities;
+package ru.gb.market.authservice.entities;
 
 import javax.persistence.*;
 import lombok.Data;

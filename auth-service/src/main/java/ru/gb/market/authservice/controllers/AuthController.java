@@ -1,4 +1,4 @@
-package ru.gb.market.core.controllers;
+package ru.gb.market.authservice.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import ru.gb.market.api.JwtRequest;
 import ru.gb.market.api.JwtResponse;
 import ru.gb.market.api.AppError;
-import ru.gb.market.core.services.UserService;
-import ru.gb.market.core.utils.JwtTokenUtil;
+import ru.gb.market.authservice.utils.JwtTokenUtil;
+import ru.gb.market.authservice.services.UserService;
 
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-@CrossOrigin("*")
 public class AuthController {
     private final UserService userService;
     private final JwtTokenUtil jwtTokenUtil;

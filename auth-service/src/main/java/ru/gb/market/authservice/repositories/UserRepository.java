@@ -1,8 +1,8 @@
-package ru.gb.market.core.repositories;
+package ru.gb.market.authservice.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.gb.market.core.entities.User;
+import ru.gb.market.authservice.entities.User;
 
 
 import java.util.Optional;

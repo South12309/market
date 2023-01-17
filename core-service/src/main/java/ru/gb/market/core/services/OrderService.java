@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gb.market.core.entities.Order;
 import ru.gb.market.core.entities.OrderItem;
-import ru.gb.market.core.entities.User;
 import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.core.integrations.CartServiceIntegration;
 import ru.gb.market.core.repositories.OrderRepository;
@@ -21,20 +20,20 @@ public class OrderService {
     private final CartServiceIntegration cartService;
     private final OrderRepository orderRepository;
     private final ProductService productService;
-    private final UserService userService;
+
 
     @Transactional
     public void createNewOrder(String username, String address, String phone) {
-        CartDto cart = cartService.getCurrentCart().orElseThrow(() -> new ResourceNotFoundException("Корзина не найдена"));
+        CartDto cart = cartService.getCurrentCart();//.orElseThrow(() -> new ResourceNotFoundException("Корзина не найдена"));
         if (cart.getItems().isEmpty()) {
             throw new IllegalStateException("Нельзя оформить заказ для пустой корзины");
         }
-        User user = userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("При оформлении заказа пользователь не найден"));
+
         Order order = new Order();
         order.setAddress(address);
         order.setPhone(phone);
         order.setTotalPrice(cart.getTotalPrice());
-        order.setUser(user);
+        order.setUsername(username);
         order.setItems(new ArrayList<>());
         cart.getItems().forEach(ci -> {
             OrderItem oi = new OrderItem();
@@ -50,8 +49,6 @@ public class OrderService {
     }
 
     public List<Order> findUserOrders(String username) {
-
-        User user = userService.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден при попытке найти заказы пользователя"));
-        return orderRepository.findAllByUser(user);
+        return orderRepository.findAllByUsername(username);
     }
 }

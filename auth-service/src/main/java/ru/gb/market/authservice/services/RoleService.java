@@ -1,9 +1,8 @@
-package ru.gb.market.core.services;
+package ru.gb.market.authservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.market.core.entities.Role;
-import ru.gb.market.core.repositories.RoleRepository;
+import ru.gb.market.authservice.repositories.RoleRepository;
 
 @Service
 @RequiredArgsConstructor

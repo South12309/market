@@ -1,6 +1,7 @@
 angular.module('market', ['ngStorage']).controller('indexController', function ($scope, $http, $localStorage) {
-    const contextPathCore = 'http://localhost:8189/market/core/api/v1';
-    const contextPathCarts = 'http://localhost:8190/market/cart/api/v1';
+    const contextPathCore = 'http://localhost:5555/core/api/v1';
+    const contextPathCarts = 'http://localhost:5555/cart/api/v1';
+    const contextPathAuth = 'http://localhost:5555/auth/api/v1';
     if ($localStorage.marchMarketUser) {
         try {
             let jwt = $localStorage.marchMarketUser.token;
@@ -20,7 +21,7 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     }
 
     $scope.tryToAuth = function () {
-        $http.post(contextPathCore + '/auth', $scope.user)
+        $http.post(contextPathAuth + '/auth', $scope.user)
             .then(function successCallback(response) {
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;

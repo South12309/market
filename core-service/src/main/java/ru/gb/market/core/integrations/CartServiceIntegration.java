@@ -1,12 +1,8 @@
 package ru.gb.market.core.integrations;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import ru.gb.market.api.CartDto;
 
 import java.util.Optional;
@@ -14,31 +10,62 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CartServiceIntegration {
-    private final RestTemplate restTemplate;
 
-    public Optional<CartDto> getCurrentCart() {
-        return Optional.ofNullable(restTemplate.getForObject("http://localhost:8190/market/cart/api/v1/cart", CartDto.class));
-    }
+    private final WebClient cartServiceWebClient;
 
-    public void addProductToCart(Long id) {
-        restTemplate.getForObject("http://localhost:8190/market/cart/api/v1/cart/add/" + id, CartDto.class);
+    public CartDto getCurrentCart() {
+        return cartServiceWebClient.get()
+                .uri("/api/v1/cart")
+                // .header("username", username)
+                .retrieve()
+                .bodyToMono(CartDto.class)
+                .block();
     }
 
     public void clearCart() {
-        restTemplate.getForObject("http://localhost:8190/market/cart/api/v1/cart/clear", Optional.class);
+        cartServiceWebClient.get()
+                .uri("/api/v1/cart/clear")
+                //  .header("username", username)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+    }
+
+    public void addProductToCart(Long id) {
+        cartServiceWebClient.get()
+                .uri("/api/v1/cart/add/" + id)
+                //  .header("username", username)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     public void deleteProductFromCart(Long id) {
-        restTemplate.getForObject("http://localhost:8190/market/cart/api/v1/cart/delete/" + id, Optional.class);
+        cartServiceWebClient.get()
+                .uri("/api/v1/cart/delete/" + id)
+                //  .header("username", username)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     public void increaseProductCountInCart(Long id) {
-        restTemplate.getForObject("http://localhost:8190/market/cart/api/v1/cart/inc/" + id, Optional.class);
+        cartServiceWebClient.get()
+                .uri("/api/v1/cart/inc/" + id)
+                //  .header("username", username)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
     }
 
     public void decreaseProductCountInCart(Long id) {
-        restTemplate.getForObject("http://localhost:8190/market/cart/api/v1/cart/dec/" + id, Optional.class);
+        cartServiceWebClient.get()
+                .uri("/api/v1/cart/dec/" + id)
+                //  .header("username", username)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
+
+
     }
-
-
 }

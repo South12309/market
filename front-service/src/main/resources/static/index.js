@@ -2,6 +2,8 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     const contextPathCore = 'http://localhost:5555/core/api/v1';
     const contextPathCarts = 'http://localhost:5555/cart/api/v1';
     const contextPathAuth = 'http://localhost:5555/auth/api/v1';
+    let offsetPage = 0;
+    let pageCount =10;
     if ($localStorage.marchMarketUser) {
         try {
             let jwt = $localStorage.marchMarketUser.token;
@@ -57,6 +59,25 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
                 $scope.products = response.data;
             });
     };
+
+    $scope.change_page = function (pageVar, min, max, titlePart) {
+        offsetPage = offsetPage + pageVar;
+        if (offsetPage < 0) offsetPage = 0;
+        if (offsetPage > pageCount) offsetPage = pageCount;
+        $http({
+            url: contextPathCore + '/products',
+            method: 'GET',
+            params: {
+                page: offsetPage,
+                min: $scope.min,
+                max: $scope.max,
+                titlePart: $scope.titlePart
+            }
+        }).then(function (response) {
+            $scope.products = response.data.content;
+            pageCount = response.data.totalPages;
+        });
+    }
 
     $scope.loadOrders = function () {
         $http.get(contextPathCore + '/orders')
@@ -131,7 +152,8 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
     //         });
     // }
 
-    $scope.loadProducts();
+   // $scope.loadProducts();
+    $scope.change_page(offsetPage);
     $scope.loadCart();
     $scope.loadOrders();
 });

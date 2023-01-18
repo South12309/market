@@ -49,6 +49,23 @@
     <p></p>
     <h3>Список товаров</h3>
     <p></p>
+    <div class="input-group">
+        <div class="form-group">
+            <label for="min">Минимальная цена</label>
+            <input id="min" ng-model="min" type="text" aria-label="Минимальная цена" class="form-control" placeholder="Введите минимальную цену">
+        </div>
+        <div class="form-group">
+            <label for="max">Максимальная цена</label>
+            <input id="max" ng-model="max" type="text" aria-label="Максимальная цена" class="form-control" placeholder="Введите максимальную цену">
+        </div>
+        <div class="form-group">
+            <label for="titlePart">Наименование продукта</label>
+            <input id="titlePart" ng-model="titlePart" type="text" aria-label="Наименование продукта" class="form-control" placeholder="Введите наименование продукта">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" ng-click="change_page(0, min, max, titlePart)" >Применить фильтр</button>
+        </div>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -69,7 +86,10 @@
         </tr>
         </tbody>
     </table>
-
+    <div class="container">
+        <button class="btn btn-secondary"  ng-click="change_page(- 1, min, max, titlePart)" >Предыдущая страница </button>
+        <button class="btn btn-primary" ng-click="change_page(1, min, max, titlePart)" >Следующая страница</button>
+    </div>
     <p></p>
 
     <div class="input-group">

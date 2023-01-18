@@ -1,6 +1,7 @@
 package ru.gb.market.core.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.market.core.converters.ProductConverter;
@@ -9,8 +10,7 @@ import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.core.services.ProductService;
 
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -20,8 +20,14 @@ public class ProductController {
     private final ProductConverter productConverter;
 
     @GetMapping
-    public List<ProductDto> getAllProducts() {
-        return productService.findAll().stream().map(productConverter::entityToDto).collect(Collectors.toList());
+    public Page<ProductDto> getAllProducts(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(required = false) BigDecimal min,
+            @RequestParam(required = false) BigDecimal max,
+            @RequestParam(required = false) String titlePart
+    ) {
+        if (page<1) {page=1;}
+        return productService.findAll(min, max, titlePart, page).map(productConverter::entityToDto);//.getContent();
     }
 
     @GetMapping("/{id}")

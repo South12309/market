@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.market.core.converters.OrderConverter;
 import ru.gb.market.api.OrderDto;
+import ru.gb.market.core.entities.Order;
 import ru.gb.market.core.services.OrderService;
 
 import java.security.Principal;
@@ -23,7 +24,7 @@ public class OrderController {
     }
 
     @PostMapping("/{address}/{phone}")
-    public void createNewOrder(@RequestHeader String username, @PathVariable String address, @PathVariable String phone) {
-        orderService.createNewOrder(username, address, phone);
+    public Order createNewOrder(@RequestHeader String username, @PathVariable String address, @PathVariable String phone) {
+        return orderService.createNewOrder(username, address, phone);
     }
 }

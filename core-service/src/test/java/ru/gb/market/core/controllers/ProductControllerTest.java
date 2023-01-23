@@ -26,10 +26,6 @@ class ProductControllerTest extends CoreServiceApplicationTests {
     @Autowired
     CategoryRepository categoryRepository;
 
-    @BeforeEach
-    void setUp() {
-
-    }
 
     @Test
     void getAllProducts() {

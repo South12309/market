@@ -37,8 +37,8 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createNewProducts(@RequestBody ProductDto productDto) {
-        productService.createNewProduct(productDto);
+    public ProductDto createNewProducts(@RequestBody ProductDto productDto) {
+       return productConverter.entityToDto(productService.createNewProduct(productDto));
     }
 
     @DeleteMapping("/{id}")

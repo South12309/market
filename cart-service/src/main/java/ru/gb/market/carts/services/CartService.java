@@ -4,7 +4,6 @@ package ru.gb.market.carts.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.gb.market.api.ProductDto;
-import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.carts.integrations.ProductServiceIntegration;
 import ru.gb.market.carts.models.Cart;
 

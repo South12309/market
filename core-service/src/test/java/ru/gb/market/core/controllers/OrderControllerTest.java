@@ -78,16 +78,4 @@ class OrderControllerTest extends CoreServiceApplicationTests {
         Assertions.assertEquals(orderFromHttp.getPhone(),phone);
     }
 
-
-
-
-    @GetMapping
-    public List<OrderDto> getUserOrders(@RequestHeader String username) {
-        return orderService.findUserOrders(username).stream().map(orderConverter::entityToDto).collect(Collectors.toList());
-    }
-
-    @PostMapping("/{address}/{phone}")
-    public Order createNewOrder(@RequestHeader String username, @PathVariable String address, @PathVariable String phone) {
-        return orderService.createNewOrder(username, address, phone);
-    }
 }

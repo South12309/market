@@ -20,10 +20,10 @@ public class Cart {
     @Column(name = "id")
     private Long id;
 
-    @Column(name="username")
+    @Column(name="username", unique = true)
     private String username;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
     private List<CartItem> items;
     @Column(name = "total_price")
     private BigDecimal totalPrice;

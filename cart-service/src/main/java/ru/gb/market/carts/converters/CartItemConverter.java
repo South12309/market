@@ -2,7 +2,7 @@ package ru.gb.market.carts.converters;
 
 import org.springframework.stereotype.Component;
 import ru.gb.market.api.CartItemDto;
-import ru.gb.market.carts.models.CartItem;
+import ru.gb.market.carts.entities.CartItem;
 
 
 @Component

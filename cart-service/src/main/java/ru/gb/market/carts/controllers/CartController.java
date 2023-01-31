@@ -15,28 +15,28 @@ public class CartController {
     private final CartConverter cartConverter;
 
     @GetMapping
-    public CartDto getCurrentCart() {
-        return cartConverter.entityToDto(cartService.getCommontCart());
+    public CartDto getCurrentCart(@RequestHeader(required = false) String username) {
+        return cartConverter.entityToDto(cartService.getCartToController(username));
     }
 
     @GetMapping("/add/{productId}")
-    public void addProductToCart(@PathVariable Long productId, @RequestHeader String username) {
+    public void addProductToCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
         cartService.addToCart(productId, username);
     }
     @GetMapping("/clear")
-    public void clearCart(@RequestHeader String username) {
+    public void clearCart(@RequestHeader(required = false) String username) {
         cartService.clearCart(username);
     }
     @GetMapping("/delete/{productId}")
-    public void deleteProductFromCart(@PathVariable Long productId, @RequestHeader String username) {
+    public void deleteProductFromCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
         cartService.deleteFromCart(productId,username);
     }
     @GetMapping("/inc/{productId}")
-    public void increaseProductCountInCart(@PathVariable Long productId, @RequestHeader String username) {
+    public void increaseProductCountInCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
         cartService.increaseProductCountInCart(productId, username);
     }
     @GetMapping("/dec/{productId}")
-    public void decreaseProductCountInCart(@PathVariable Long productId, @RequestHeader String username) {
+    public void decreaseProductCountInCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
         cartService.decreaseProductCountInCart(productId, username);
     }
 }

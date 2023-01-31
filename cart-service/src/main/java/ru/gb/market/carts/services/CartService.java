@@ -4,130 +4,89 @@ package ru.gb.market.carts.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.gb.market.api.ProductDto;
 import ru.gb.market.carts.integrations.ProductServiceIntegration;
-import ru.gb.market.carts.entities.Cart;
-import ru.gb.market.carts.entities.CartItem;
-import ru.gb.market.carts.repositories.CartItemRepository;
-import ru.gb.market.carts.repositories.CartRepository;
+import ru.gb.market.carts.models.Cart;
+import ru.gb.market.carts.models.CartItem;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CartService {
     private final ProductServiceIntegration productServiceIntegration;
-    private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
+    private Map<String, Cart> privateCarts;
     private Cart commonCart;
 
     @PostConstruct
     public void init() {
-
-        commonCart = new Cart();
-        commonCart.setItems(new ArrayList<>());
+        privateCarts = new HashMap<>();
+        commonCart = new Cart(new ArrayList<CartItem>(), BigDecimal.ZERO);
     }
 
-    public Cart getCommontCart() {
-        return commonCart;
+    public Cart getCartToController(String username) {
+        return getCart(username);
+
     }
 
     public Cart getCartOfUser(String username) {
-        Cart cart = cartRepository.findByUsername(username).orElse(cartRepository.save(new Cart(null, username, null, BigDecimal.valueOf(0))));
+        Cart cart = privateCarts.get(username);
         return cart;
     }
 
 
     public void addToCart(Long productId, String username) {
+        Cart cart = getCart(username);
+        ProductDto p = productServiceIntegration.getProduct(productId);
+        cart.add(p);
+
+
+    }
+
+    private Cart getCart(String username) {
         Cart cart;
         if (username == null) {
             cart = commonCart;
         } else {
-            cart = cartRepository.findByUsername(username).orElse(cartRepository.save(new Cart(null, username, new ArrayList<>(), BigDecimal.valueOf(0))));
-
-        }
-
-//        if (cart.getItems()==null) {
-//            cart.setItems(new ArrayList<>());
-//        }
-        for (CartItem item : cart.getItems()) {
-            if (item.getProductId().equals(productId)) {
-                item.setQuantity(item.getQuantity() + 1);
-                recalculatePriceOfCart(cart);
-                return;
+            cart = privateCarts.get(username);
+            if(cart==null) {
+                cart = new Cart(new ArrayList<CartItem>(), BigDecimal.valueOf(0));
+                privateCarts.put(username, cart);
             }
         }
-
-        ProductDto p = productServiceIntegration.getProduct(productId);//.orElseThrow(() -> new ResourceNotFoundException("Продукт с id: " + productId + " не найден"));
-        CartItem cartItem = cartItemRepository.save(new CartItem(null, cart, p.getId(), p.getTitle(), 1, p.getPrice(), p.getPrice()));
-        //  CartItem cartItem = new CartItem(null, cart, p.getId(), p.getTitle(), 1, p.getPrice(), p.getPrice());
-        cart.getItems().add(cartItem);
-        // cart = cartRepository.findByUsername(username).get();
-        recalculatePriceOfCart(cart);
-        cartRepository.save(cart);
-
+        return cart;
     }
 
-    private void recalculatePriceOfCart(Cart cart) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        cart.getItems().forEach(i -> totalPrice.add(i.getPrice()));
-        cart.setTotalPrice(totalPrice);
-    }
+//    private void recalculatePriceOfCart(Cart cart) {
+//        BigDecimal totalPrice = BigDecimal.ZERO;
+//        cart.getItems().forEach(i -> totalPrice.add(i.getPrice()));
+//        cart.setTotalPrice(totalPrice);
+//    }
 
     public void clearCart(String username) {
-
-        Cart cart;
-        if (username == null) {
-            cart = commonCart;
-        } else {
-            cart = cartRepository.findByUsername(username).orElse(cartRepository.save(new Cart(null, username, null, BigDecimal.valueOf(0))));
-        }
-        cart.getItems().clear();
-        cart.setTotalPrice(BigDecimal.ONE);
+        Cart cart = getCart(username);
+        cart.clear();
     }
 
     public void deleteFromCart(Long productId, String username) {
-        Cart cart;
-        if (username == null) {
-            cart = commonCart;
-        } else {
-            cart = cartRepository.findByUsername(username).orElse(cartRepository.save(new Cart(null, username, null, BigDecimal.valueOf(0))));
-        }
-        cart.getItems().removeIf(s -> s.getProductId().equals(productId));
-        recalculatePriceOfCart(cart);
+        Cart cart = privateCarts.get(username);
+        cart.delete(productId);
 
     }
 
     public void increaseProductCountInCart(Long productId, String username) {
-        Cart cart;
-        if (username == null) {
-            cart = commonCart;
-        } else {
-            cart = cartRepository.findByUsername(username).orElse(cartRepository.save(new Cart(null, username, null, BigDecimal.valueOf(0))));
-        }
-        cart.getItems().stream().filter(s -> s.getProductId().equals(productId)).forEach(m -> {
-            m.setQuantity(m.getQuantity() + 1);
-            m.setPrice(m.getPrice().add(m.getPricePerProduct()));
-        });
+        Cart cart = privateCarts.get(username);
+        cart.increaseProductCountInCart(productId);
 
     }
 
     public void decreaseProductCountInCart(Long productId, String username) {
-        Cart cart;
-        if (username == null) {
-            cart = commonCart;
-        } else {
-            cart = cartRepository.findByUsername(username).orElse(cartRepository.save(new Cart(null, username, null, BigDecimal.valueOf(0))));
-        }
-        cart.getItems().stream().filter(s -> s.getProductId().equals(productId)).forEach(m -> {
-            m.setQuantity(m.getQuantity() + 1);
-            m.setPrice(m.getPrice().subtract(m.getPricePerProduct()));
-        });
-
+        Cart cart = privateCarts.get(username);
+        cart.decreaseProductCountInCart(productId);
     }
 }

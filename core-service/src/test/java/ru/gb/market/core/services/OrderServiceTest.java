@@ -57,7 +57,7 @@ class OrderServiceTest extends CoreServiceApplicationTests {
     @Test
     void createNewOrder() {
 
-        Mockito.when(cartService.getCurrentCart()).thenReturn(returnCart);
+        Mockito.when(cartService.getCurrentCart(username)).thenReturn(returnCart);
 
         Order savedOrder = orderService.createNewOrder(username, address, phone);
         Assertions.assertNotNull(savedOrder);

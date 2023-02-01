@@ -24,7 +24,9 @@ public class CartController {
 
     @GetMapping("/{uuid}")
     public CartDto getCurrentCart(@RequestHeader(name = "username", required = false) String username, @PathVariable String uuid) {
-        cartService.mergeCarts(username,uuid);
+        if (username!=null) {
+            cartService.mergeCarts(username,uuid);
+        }
         String targetUuid = getCartUuid(username, uuid);
         return cartConverter.entityToDto(cartService.getCurrentCart(targetUuid));
     }

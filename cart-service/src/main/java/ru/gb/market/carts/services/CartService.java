@@ -24,10 +24,10 @@ import java.util.function.Consumer;
 public class CartService {
     private final ProductServiceIntegration productServiceIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
-//    private Map<String, Cart> privateCarts;
+    //    private Map<String, Cart> privateCarts;
 //    private Cart commonCart;
-@Value("${cart-service.cart-prefix}")
-private String cartPrefix;
+    @Value("${cart-service.cart-prefix}")
+    private String cartPrefix;
 
 //    @PostConstruct
 //    public void init() {
@@ -41,8 +41,8 @@ private String cartPrefix;
             redisTemplate.opsForValue().set(targetUuid, new Cart());
         }
 
-         Cart o = (Cart)redisTemplate.opsForValue().get(targetUuid);
-        return  o;
+        Cart o = (Cart) redisTemplate.opsForValue().get(targetUuid);
+        return o;
     }
 
 //    public Cart getCartToController(String username) {
@@ -99,7 +99,7 @@ private String cartPrefix;
     }
 
     public void decreaseProductCountInCart(String uuid, Long productId) {
-        execute(uuid, cart -> cart.increaseProductCountInCart(productId));
+        execute(uuid, cart -> cart.decreaseProductCountInCart(productId));
 
     }
 
@@ -112,9 +112,11 @@ private String cartPrefix;
     public void mergeCarts(String username, String uuid) {
         Cart userCart = getCurrentCart(username);
         Cart commonCart = getCurrentCart(uuid);
-        commonCart.getItems().stream().forEach(cartItem -> userCart.addItem(cartItem));
-        commonCart.clear();//чистим дефолтную
-        redisTemplate.opsForValue().set(cartPrefix + username, userCart);
-        redisTemplate.opsForValue().set(cartPrefix + uuid, commonCart);
+        if (commonCart.getItems().size() > 0) {
+            commonCart.getItems().stream().forEach(cartItem -> userCart.add(productServiceIntegration.getProduct(cartItem.getProductId())));
+            commonCart.clear();//чистим дефолтную
+            redisTemplate.opsForValue().set(cartPrefix + username, userCart);
+            redisTemplate.opsForValue().set(cartPrefix + uuid, commonCart);
+        }
     }
 }

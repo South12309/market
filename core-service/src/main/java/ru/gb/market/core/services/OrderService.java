@@ -23,7 +23,7 @@ public class OrderService {
 
 
     @Transactional
-    public Order createNewOrder(String username, String address, String phone) {
+    public Order createNewOrder(String username,  String address, String phone) {
         CartDto cart = cartService.getCurrentCart(username);//.orElseThrow(() -> new ResourceNotFoundException("Корзина не найдена"));
         if (cart.getItems().isEmpty()) {
             throw new IllegalStateException("Нельзя оформить заказ для пустой корзины");

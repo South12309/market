@@ -1,6 +1,5 @@
 package ru.gb.market.carts.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.gb.market.api.ProductDto;
 

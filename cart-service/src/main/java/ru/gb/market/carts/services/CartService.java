@@ -9,13 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.gb.market.api.ProductDto;
 import ru.gb.market.carts.integrations.ProductServiceIntegration;
 import ru.gb.market.carts.models.Cart;
-import ru.gb.market.carts.models.CartItem;
 
-import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 @Service
@@ -24,16 +18,10 @@ import java.util.function.Consumer;
 public class CartService {
     private final ProductServiceIntegration productServiceIntegration;
     private final RedisTemplate<String, Object> redisTemplate;
-    //    private Map<String, Cart> privateCarts;
-//    private Cart commonCart;
+
     @Value("${cart-service.cart-prefix}")
     private String cartPrefix;
 
-//    @PostConstruct
-//    public void init() {
-//        privateCarts = new HashMap<>();
-//        commonCart = new Cart();
-//    }
 
     public Cart getCurrentCart(String uuid) {
         String targetUuid = cartPrefix + uuid;
@@ -45,15 +33,6 @@ public class CartService {
         return o;
     }
 
-//    public Cart getCartToController(String username) {
-//        return getCart(username);
-//
-//    }
-
-//    public Cart getCartOfUser(String username) {
-//        Cart cart = privateCarts.get(username);
-//        return cart;
-//    }
 
 
     public void addToCart(String uuid, Long productId) {
@@ -63,25 +42,7 @@ public class CartService {
 
     }
 
-//    private Cart getCart(String username) {
-//        Cart cart;
-//        if (username == null) {
-//            cart = commonCart;
-//        } else {
-//            cart = privateCarts.get(username);
-//            if(cart==null) {
-//                cart = new Cart();
-//                privateCarts.put(username, cart);
-//            }
-//        }
-//        return cart;
-//    }
 
-//    private void recalculatePriceOfCart(Cart cart) {
-//        BigDecimal totalPrice = BigDecimal.ZERO;
-//        cart.getItems().forEach(i -> totalPrice.add(i.getPrice()));
-//        cart.setTotalPrice(totalPrice);
-//    }
 
     public void clearCart(String uuid) {
         execute(uuid, Cart::clear);
@@ -114,7 +75,7 @@ public class CartService {
         Cart commonCart = getCurrentCart(uuid);
         if (commonCart.getItems().size() > 0) {
             commonCart.getItems().stream().forEach(cartItem -> userCart.add(productServiceIntegration.getProduct(cartItem.getProductId())));
-            commonCart.clear();//чистим дефолтную
+            commonCart.clear();
             redisTemplate.opsForValue().set(cartPrefix + username, userCart);
             redisTemplate.opsForValue().set(cartPrefix + uuid, commonCart);
         }

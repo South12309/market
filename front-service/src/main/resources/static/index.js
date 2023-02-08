@@ -22,29 +22,36 @@
                 templateUrl: 'orders/orders.html',
                 controller: 'ordersController'
             })
+            .when('/registration', {
+                templateUrl: 'registration/registration.html',
+                controller: 'registrationController'
+            })
             .otherwise({
                 redirectTo: '/'
             });
     }
 
     function run($rootScope, $http, $localStorage) {
-        if ($localStorage.marchMarketUser) {
+        if ($localStorage.marketUser) {
             try {
-                let jwt = $localStorage.marchMarketUser.token;
+                let jwt = $localStorage.marketUser.token;
                 let payload = JSON.parse(atob(jwt.split('.')[1]));
                 let currentTime = parseInt(new Date().getTime() / 1000);
                 if (currentTime > payload.exp) {
                     console.log("Token is expired!!!");
-                    delete $localStorage.marchMarketUser;
+                    delete $localStorage.marketUser;
                     $http.defaults.headers.common.Authorization = '';
                 }
             } catch (e) {
             }
+                $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.marketUser.token;
 
-            if ($localStorage.marchMarketUser) {
-                $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.marchMarketUser.token;
-            }
-
+        }
+        if (!$localStorage.marketGuestCartId) {
+            $http.get('http://localhost:5555/cart/api/v1/cart/generate_uuid')
+                .then(function successCallback(response) {
+                    $localStorage.marketGuestCartId = response.data.value;
+                });
         }
     }
 })();
@@ -56,26 +63,29 @@ angular.module('market').controller('indexController', function ($rootScope, $sc
             .then(function successCallback(response) {
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
-                    $localStorage.marchMarketUser = {username: $scope.user.username, token: response.data.token};
+                    $localStorage.marketUser = {username: $scope.user.username, token: response.data.token};
                     $scope.user.username = null;
                     $scope.user.password = null;
                 }
             }, function errorCallback(response) {
+                $location.path('/');
             });
+
     };
 
     $scope.tryToLogout = function () {
         $scope.clearUser();
+        $scope.user = null;
         $location.path('/');
     };
 
     $scope.clearUser = function () {
-        delete $localStorage.marchMarketUser;
+        delete $localStorage.marketUser;
         $http.defaults.headers.common.Authorization = '';
     };
 
     $rootScope.isUserLoggedIn = function () {
-        if ($localStorage.marchMarketUser) {
+        if ($localStorage.marketUser) {
             return true;
         } else {
             return false;

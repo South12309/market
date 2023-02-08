@@ -15,28 +15,28 @@ public class CartController {
     private final CartConverter cartConverter;
 
     @GetMapping
-    public CartDto getCurrentCart() {
-        return cartConverter.entityToDto(cartService.getCurrentCart());
+    public CartDto getCurrentCart(@RequestHeader(required = false) String username) {
+        return cartConverter.entityToDto(cartService.getCartToController(username));
     }
 
     @GetMapping("/add/{productId}")
-    public void addProductToCart(@PathVariable Long productId) {
-        cartService.addToCart(productId);
+    public void addProductToCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
+        cartService.addToCart(productId, username);
     }
     @GetMapping("/clear")
-    public void clearCart() {
-        cartService.clearCart();
+    public void clearCart(@RequestHeader(required = false) String username) {
+        cartService.clearCart(username);
     }
     @GetMapping("/delete/{productId}")
-    public void deleteProductFromCart(@PathVariable Long productId) {
-        cartService.deleteFromCart(productId);
+    public void deleteProductFromCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
+        cartService.deleteFromCart(productId,username);
     }
     @GetMapping("/inc/{productId}")
-    public void increaseProductCountInCart(@PathVariable Long productId) {
-        cartService.increaseProductCountInCart(productId);
+    public void increaseProductCountInCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
+        cartService.increaseProductCountInCart(productId, username);
     }
     @GetMapping("/dec/{productId}")
-    public void decreaseProductCountInCart(@PathVariable Long productId) {
-        cartService.decreaseProductCountInCart(productId);
+    public void decreaseProductCountInCart(@PathVariable Long productId, @RequestHeader(required = false) String username) {
+        cartService.decreaseProductCountInCart(productId, username);
     }
 }

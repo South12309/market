@@ -1,5 +1,6 @@
 package ru.gb.market.carts.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.gb.market.api.ProductDto;
 
@@ -8,7 +9,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class Cart {
+
     private List<CartItem> items;
     private BigDecimal totalPrice;
 

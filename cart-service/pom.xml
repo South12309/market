@@ -44,7 +44,7 @@
             <groupId>ru.gb.market</groupId>
             <artifactId>api</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

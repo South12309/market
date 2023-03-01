@@ -67,7 +67,7 @@ public class CartService {
     private void execute(String uuid, Consumer<Cart> operation) {
         Cart cart = getCurrentCart(uuid);
         operation.accept(cart);
-        redisTemplate.opsForValue().set(cartPrefix + uuid, cart);
+        saveCartToRedis(cartPrefix + uuid, cart);
     }
 
     public void mergeCarts(String username, String uuid) {
@@ -76,8 +76,12 @@ public class CartService {
         if (commonCart.getItems().size() > 0) {
             commonCart.getItems().stream().forEach(cartItem -> userCart.add(productServiceIntegration.getProduct(cartItem.getProductId())));
             commonCart.clear();
-            redisTemplate.opsForValue().set(cartPrefix + username, userCart);
-            redisTemplate.opsForValue().set(cartPrefix + uuid, commonCart);
+            saveCartToRedis(cartPrefix + username, userCart);
+            saveCartToRedis(cartPrefix + uuid, commonCart);
         }
+    }
+
+    public void saveCartToRedis(String uuid, Cart cart) {
+        redisTemplate.opsForValue().set(uuid, cart);
     }
 }

@@ -20,9 +20,15 @@ public class CartServiceProxy {
 
     private final Map<String, Cart> proxyCart=new HashMap<>();
 
+//    @Around("execution(public void org.springframework.data.redis.core.ValueOperations.set(..))")
+//    public void setCartInRedis(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+//        Object[] args = proceedingJoinPoint.getArgs();
+//        proxyCart.put((String)args[0], (Cart)args[1]);
+//        proceedingJoinPoint.proceed();
+//        log.info("CARTNUMBER = " + args[0].toString() + "CART = " + args[1].toString());
+//    }
 
-
-    @Around("execution(public * ru.gb.market.carts.services.CartService.getCurrentCart(*))")
+    @Around("execution(public * ru.gb.market.carts.aop.RedisTemplateAdapter.get(*))")
     public Cart getCurrentCartFromProxy(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         Object[] args = proceedingJoinPoint.getArgs();
         log.info("Получил аргумент " + args.toString());
@@ -41,7 +47,15 @@ public class CartServiceProxy {
         }
     }
 
-    @Before("execution(public void ru.gb.market.carts.services.CartService.saveCartToRedis(..))")
+
+
+//    @After("execution(public void ru.gb.market.carts.services.CartService.saveCartToRedis(..))")
+//    public void setCartInRedis(JoinPoint joinPoint) {
+//        Object[] args = joinPoint.getArgs();
+//        proxyCart.put((String)args[0], (Cart)args[1]);
+//        log.info("CARTNUMBER = " + args[0].toString() + "CART = " + args[1].toString());
+//    }
+    @After("execution(public void ru.gb.market.carts.aop.RedisTemplateAdapter.set(..))")
     public void setCartInRedis(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         proxyCart.put((String)args[0], (Cart)args[1]);

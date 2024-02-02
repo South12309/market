@@ -6,14 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ru.gb.market.api.ProductDto;
-import ru.gb.market.core.entities.Product;
 import ru.gb.market.api.ResourceNotFoundException;
+import ru.gb.market.core.entities.Product;
+import ru.gb.market.api.ProductDto;
 import ru.gb.market.core.repositories.ProductRepository;
 import ru.gb.market.core.repositories.specifications.ProductsSpecifications;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -43,12 +42,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public void createNewProduct(ProductDto productDto) {
+    public Product createNewProduct(ProductDto productDto) {
         Product product = new Product();
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
         product.setCategory(categoryService.findByTitle(productDto.getCategoryTitle()).orElseThrow(() -> new ResourceNotFoundException("Категория с названием: " + productDto.getCategoryTitle() + " не найдена")));
-        productRepository.save(product);
+        return productRepository.save(product);
     }
 
     public Optional<Product> findById(Long id) {

@@ -2,11 +2,8 @@ package ru.gb.market.carts.integrations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.gb.market.api.ProductDto;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

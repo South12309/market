@@ -1,16 +1,25 @@
 package ru.gb.market.carts.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.gb.market.api.ProductDto;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
+
 public class Cart {
+
     private List<CartItem> items;
     private BigDecimal totalPrice;
+
+    public Cart() {
+        this.items = new ArrayList<>();
+        this.totalPrice = BigDecimal.ZERO;
+    }
 
     public void add(ProductDto p) {
         for (CartItem item : items) {
@@ -45,5 +54,10 @@ public class Cart {
     }
     public void decreaseProductCountInCart(Long productId) {
         items.stream().filter(s->s.getProductId().equals(productId)).forEach(m->m.decrementQuantity());
+    }
+
+    public void addItem(CartItem cartItem) {
+        items.add(cartItem);
+        recalculate();
     }
 }

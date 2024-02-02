@@ -24,7 +24,7 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
                 if (response.data.token) {
                     $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
                     $localStorage.marchMarketUser = {username: $scope.user.username, token: response.data.token};
-
+                    $scope.loadOrders();
                     $scope.user.username = null;
                     $scope.user.password = null;
                 }
@@ -56,6 +56,13 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
             });
     };
 
+    $scope.loadOrders = function () {
+        $http.get(contextPath + '/orders')
+            .then(function (response) {
+                $scope.orders = response.data;
+            });
+    };
+
     $scope.loadCart = function () {
         $http.get(contextPath + '/cart')
             .then(function (response) {
@@ -83,10 +90,11 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
             });
     }
 
-    $scope.createOrder = function () {
-        $http.post(contextPath + '/orders')
+    $scope.createOrder = function (address, phone) {
+        $http.post(contextPath + '/orders/' + address + '/' + phone)
             .then(function (response) {
                 $scope.loadCart();
+                $scope.loadOrders();
             });
 
     }
@@ -122,4 +130,5 @@ angular.module('market', ['ngStorage']).controller('indexController', function (
 
     $scope.loadProducts();
     $scope.loadCart();
+    $scope.loadOrders();
 });

@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import ru.gb.market.api.ProductDto;
+import ru.gb.market.carts.aop.RedisTemplateAdapter;
 import ru.gb.market.carts.integrations.ProductServiceIntegration;
 import ru.gb.market.carts.models.Cart;
 
@@ -17,7 +19,9 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class CartService {
     private final ProductServiceIntegration productServiceIntegration;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplateAdapter<String, Object> redisTemplateAdapter;
+
+
 
     @Value("${cart-service.cart-prefix}")
     private String cartPrefix;
@@ -25,11 +29,11 @@ public class CartService {
 
     public Cart getCurrentCart(String uuid) {
         String targetUuid = cartPrefix + uuid;
-        if (!redisTemplate.hasKey(targetUuid)) {
-            redisTemplate.opsForValue().set(targetUuid, new Cart());
+        if (!redisTemplateAdapter.hasKey(targetUuid)) {
+            redisTemplateAdapter.set(targetUuid, new Cart());
         }
 
-        Cart o = (Cart) redisTemplate.opsForValue().get(targetUuid);
+        Cart o = (Cart) redisTemplateAdapter.get(targetUuid);
         return o;
     }
 
@@ -67,7 +71,7 @@ public class CartService {
     private void execute(String uuid, Consumer<Cart> operation) {
         Cart cart = getCurrentCart(uuid);
         operation.accept(cart);
-        redisTemplate.opsForValue().set(cartPrefix + uuid, cart);
+        saveCartToRedis(cartPrefix + uuid, cart);
     }
 
     public void mergeCarts(String username, String uuid) {
@@ -76,8 +80,12 @@ public class CartService {
         if (commonCart.getItems().size() > 0) {
             commonCart.getItems().stream().forEach(cartItem -> userCart.add(productServiceIntegration.getProduct(cartItem.getProductId())));
             commonCart.clear();
-            redisTemplate.opsForValue().set(cartPrefix + username, userCart);
-            redisTemplate.opsForValue().set(cartPrefix + uuid, commonCart);
+            saveCartToRedis(cartPrefix + username, userCart);
+            saveCartToRedis(cartPrefix + uuid, commonCart);
         }
+    }
+
+    public void saveCartToRedis(String uuid, Cart cart) {
+        redisTemplateAdapter.set(uuid, cart);
     }
 }

@@ -1,0 +1,32 @@
+<div>
+  <h3>Список заказов</h3>
+  <p></p>
+  <div ng-repeat="o in orders">
+    <label>Заказ № {{o.id}} |</label>
+    <label>На сумму: {{o.totalPrice}} |</label>
+    <label>Адрес: {{o.address}} |</label>
+    <label>Телефон: {{o.phone}}</label>
+    <table class="table">
+      <thead class="thead-dark">
+      <tr>
+        <td>Название</td>
+        <td>Количество</td>
+        <td>Цена</td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="ci in o.items">
+        <td>{{ci.productTitle}}</td>
+        <td>{{ci.quantity}} </td>
+        <td>{{ci.pricePerProduct + ' x ' + ci.quantity + ' = ' + ci.price}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Итого:</td>
+        <td>{{o.totalPrice}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <p></p>
+</div>

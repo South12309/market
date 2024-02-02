@@ -14,6 +14,15 @@ public class OrderConverter {
     private final OrderItemConverter orderItemConverter;
 
     public OrderDto entityToDto(Order o) {
-        return new OrderDto(o.getId(), o.getItems().stream().map(orderItemConverter::entityToDto).collect(Collectors.toList()), o.getTotalPrice(), o.getAddress(), o.getPhone());
+        return OrderDto.builder()
+                .id(o.getId())
+                .items(o.getItems().stream().map(orderItemConverter::entityToDto).collect(Collectors.toList()))
+                .totalPrice(o.getTotalPrice())
+                .address(o.getAddress())
+                .phone(o.getPhone())
+                .build();
+
+
+//        return new OrderDto(o.getId(), o.getItems().stream().map(orderItemConverter::entityToDto).collect(Collectors.toList()), o.getTotalPrice(), o.getAddress(), o.getPhone());
     }
 }

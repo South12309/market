@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.gb.market.api.ResourceNotFoundException;
 import ru.gb.market.core.entities.Product;
 import ru.gb.market.api.ProductDto;
+import ru.gb.market.core.lesson6_identityMap.ProductFinder;
 import ru.gb.market.core.repositories.ProductRepository;
 import ru.gb.market.core.repositories.specifications.ProductsSpecifications;
 
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final ProductFinder productFinder;
 
     public Page<Product> findAll(BigDecimal minPrice, BigDecimal maxPrice, String titlePart, Integer page) {
         Specification<Product> spec = Specification.where(null);
@@ -50,7 +52,19 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+
+
     public Optional<Product> findById(Long id) {
+        if (productFinder.isProductPresentInMapById(id)) {
+            return Optional.ofNullable(productFinder.findProductInMapById(id));
+        } else {
+            Optional<Product> product = findByIdFromDB(id);
+            productFinder.putNewTmpProductInMap(product.orElseThrow(() -> new ResourceNotFoundException("Продукт не найден, id: " + id)));
+            return product;
+        }
+    }
+
+    public Optional<Product> findByIdFromDB(Long id) {
         return productRepository.findById(id);
     }
 }

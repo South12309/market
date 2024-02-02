@@ -8,3 +8,6 @@ integrations:
     connect-timeout: 500
     read-timeout: 10000
     write-timeout: 5000
+cart-service:
+  cart-prefix: cart_
+

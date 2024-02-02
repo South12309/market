@@ -23,8 +23,8 @@ public class OrderService {
 
 
     @Transactional
-    public Order createNewOrder(String username, String address, String phone) {
-        CartDto cart = cartService.getCurrentCart();//.orElseThrow(() -> new ResourceNotFoundException("Корзина не найдена"));
+    public Order createNewOrder(String username,  String address, String phone) {
+        CartDto cart = cartService.getCurrentCart(username);//.orElseThrow(() -> new ResourceNotFoundException("Корзина не найдена"));
         if (cart.getItems().isEmpty()) {
             throw new IllegalStateException("Нельзя оформить заказ для пустой корзины");
         }
@@ -44,7 +44,7 @@ public class OrderService {
             oi.setProduct(productService.findById(ci.getProductId()).orElseThrow(() -> new ResourceNotFoundException("Product not found")));
             order.getItems().add(oi);
         });
-        cartService.clearCart();
+        cartService.clearCart(username);
         return orderRepository.save(order);
     }
 

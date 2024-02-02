@@ -24,7 +24,9 @@ public class OrderController {
     }
 
     @PostMapping("/{address}/{phone}")
-    public OrderDto createNewOrder(@RequestHeader String username, @PathVariable String address, @PathVariable String phone) {
+    public OrderDto createNewOrder(@RequestHeader(name = "username", required = true) String username, @PathVariable String address, @PathVariable String phone) {
         return orderConverter.entityToDto(orderService.createNewOrder(username, address, phone));
     }
+
+
 }

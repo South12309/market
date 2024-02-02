@@ -1,0 +1,48 @@
+<div>
+    <p></p>
+    <h3>Корзина</h3>
+    <p></p>
+    <div class="input-group">
+        <div class="form-group">
+            <label for="address">Адрес</label>
+            <input id="address" ng-model="address" type="text" aria-label="Адрес" class="form-control" placeholder="Введите адрес">
+        </div>
+        <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input id="phone" ng-model="phone" type="text" aria-label="Телефон" class="form-control" placeholder="Введите телефон">
+        </div>
+    </div>
+    <div ng-show="cart.items.length > 0">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Количество</td>
+            <td>Цена</td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="ci in cart.items">
+            <td>{{ci.productTitle}}</td>
+            <td><button type="button" class="btn btn-outline-dark" ng-click="increase(ci.productId)"> + </button> {{ci.quantity}} <button type="button" class="btn btn-outline-dark" ng-click="decrease(ci.productId)"> - </button></td>
+            <td>{{ci.pricePerProduct + ' x ' + ci.quantity + ' = ' + ci.price}}</td>
+            <td>
+                <button class="btn btn-primary" ng-click="deleteFromCart(ci.productId)">Удалить продукт из корзины</button>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Итого:</td>
+            <td>{{cart.totalPrice}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p></p>
+    <button class="btn btn-primary" ng-click="createOrder(address, phone)">Оформить заказ</button>
+    <button class="btn btn-primary" ng-click="clearCart()">Очистить корзину</button>
+    </div>
+    <div ng-show="cart.items.length == 0">
+        <p>Ваша корзина пуста</p>
+    </div>
+</div>
